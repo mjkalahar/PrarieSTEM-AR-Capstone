@@ -1,3 +1,11 @@
+# PrarieSTEM-AR-Capstone
+
+PrarieSTEM Augmented Reality Robot Control
+
+
+Extension of Project below with ability to have AR objects overlaying the Pi Camera feed
+
+
 # STEMBot Pi Integration
 
 Repository for STEMBot Pi Integration capstone project.
