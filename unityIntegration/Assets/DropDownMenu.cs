@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using NetMQ.Sockets;
@@ -48,14 +49,14 @@ public class DropDownMenu : MonoBehaviour
     void Update()
     {
 		int v = menu.value;
-
+		JArray arr = new JArray();
 		//Try to deserialize first
 		try
 		{
 			Debug.Log("Update - Current JSON: " + _json);
 			var deserialized = JsonConvert.DeserializeObject<string>(_json);
 			Debug.Log("Update - Current After Deserialize JSON: " + deserialized);
-			JArray arr = JArray.Parse(deserialized);
+			arr = JArray.Parse(deserialized);
 		}
 		//Deserialize fails
 		catch(Exception e)
@@ -64,10 +65,10 @@ public class DropDownMenu : MonoBehaviour
 			try
             {
 				Debug.Log("Update - Current JSON: " + _json);
-				JArray arr = JArray.Parse(_json);
+				arr = JArray.Parse(_json);
 			}
 			//Invalid json we can't handle
-			catch(Exception e)
+			catch(Exception ee)
             {
 				
             }
