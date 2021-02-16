@@ -6,6 +6,7 @@ using NetMQ.Sockets;
 using NetMQ;
 using System.Threading;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 public class DropDownMenu : MonoBehaviour
 {
@@ -36,6 +37,9 @@ public class DropDownMenu : MonoBehaviour
 		menu.onValueChanged.AddListener(delegate {
 			menuChange(menu);
 		});
+
+		Debug.Log("Searching for " + _serverIP + _listeningPort);
+
 		_piNameGetter = new PiNameGetter(UpdateList, _serverIP + _listeningPort);
 		_piNameGetter.Start();
     }
@@ -44,7 +48,30 @@ public class DropDownMenu : MonoBehaviour
     void Update()
     {
 		int v = menu.value;
-		JArray arr = JArray.Parse(_json);
+
+		//Try to deserialize first
+		try
+		{
+			Debug.Log("Update - Current JSON: " + _json);
+			var deserialized = JsonConvert.DeserializeObject<string>(_json);
+			Debug.Log("Update - Current After Deserialize JSON: " + deserialized);
+			JArray arr = JArray.Parse(deserialized);
+		}
+		//Deserialize fails
+		catch(Exception e)
+        {
+			//Try to use direct json
+			try
+            {
+				Debug.Log("Update - Current JSON: " + _json);
+				JArray arr = JArray.Parse(_json);
+			}
+			//Invalid json we can't handle
+			catch(Exception e)
+            {
+				
+            }
+        }
 		//clear lists
 		options = new List<string>{"Please select a Pi"};
 		ports = new List<int>{-1};
@@ -130,6 +157,7 @@ public class PiNameGetter
 				
 				if (!_newJsonString.Equals(_jsonString))
 				{
+					Debug.Log("New JSON is " + _newJsonString);
 					_jsonString = _newJsonString;
 					_messageDelegate(_jsonString);
 				}
