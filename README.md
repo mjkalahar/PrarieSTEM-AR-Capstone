@@ -24,6 +24,8 @@ Directory Structure is as Follows:
 
 4. `unityIntegration`: This folder contains the Unity portion of the application integration.
 
+5. `unityARExample`: This is an example project using ARCore and the PrarieSTEM Logo to provide a proof of concept on how we could use AR in our application
+
 Instuctions for use:
 
 It is the first step is to ensure that the Raspberry Pi is set up correctly and has the camera enabled. After that the user should run the shell script on the pi to download the necessary libraries. Next, configure the running enviornment on the computer by installing unity hub and importing the project. You then must install the version of Unity it prompts. Then create an EC2 instance and open up TCP trafic. Then run the EC2 script. Finally run the script on the raspberry PI and then start the scene within Unity. You should now see video being streamed to the Unity Application!
