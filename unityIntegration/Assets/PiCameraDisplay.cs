@@ -15,6 +15,9 @@ public class PiCameraDisplay : MonoBehaviour
     private int offset = 10000;
     private string serverIP = "tcp://ec2-13-58-201-148.us-east-2.compute.amazonaws.com:";
 
+    private int avgFrameRate;
+    public Text FPSText;
+    private float lastTime;
 
     Texture2D camTexture;
 
@@ -30,7 +33,7 @@ public class PiCameraDisplay : MonoBehaviour
     // Script Start
     private void Start()
     {
-		
+        lastTime = Time.unscaledTime;
         port = DropDownMenu.port;
         UnityEngine.Debug.Log(port);
         
@@ -48,8 +51,13 @@ public class PiCameraDisplay : MonoBehaviour
     // This is where we should put logic to display the image
     private void HandleMessage(byte[] message)
     {
+        
         this.camTexture.LoadImage(message);
         screenDisplay.texture = camTexture;
+        float diffTime = Time.unscaledTime - lastTime;
+        int fps = (int)(1f / diffTime);
+        FPSText.text = "FPS: " + fps.ToString();
+        lastTime = Time.unscaledTime;
         Canvas.ForceUpdateCanvases();
     }
 
