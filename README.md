@@ -31,6 +31,7 @@ The correct command top use this for AR input would be
 -module=Image -loop -image="Assets/PiImages/Image.jpeg
 
 Example
+
 ![alt text](AROnPiJPEGConfig.png)
 
 
