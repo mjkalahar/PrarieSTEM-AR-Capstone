@@ -24,10 +24,7 @@ Directory Structure is as Follows:
 
 4. `unityIntegration`: This folder contains the Unity portion of the application integration.
 
-5. `unityARExample`: This is an example project using ARCore and the PrarieSTEM Logo to provide a proof of concept on how we could use AR in our application
-- Video Demo: https://drive.google.com/file/d/1zg6h3XXOHQ70lFQUF7rJltCen69P8ZnL/view?usp=sharing
-
-6. `testScripts`: This folder contains some preliminary scripts for testing and proof of concept ideas 
+5. `testScripts`: This folder contains some preliminary scripts for testing and proof of concept ideas 
 - Frame Mocker: Pretends to be a Raspberry Pi and sends 'Camera frames' using an image
 - Multi-scaling Template Matching: Finds the PrarieSTEM lightbulb within an image
 
