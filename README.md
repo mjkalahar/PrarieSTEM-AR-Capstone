@@ -24,6 +24,17 @@ Directory Structure is as Follows:
 
 4. `unityIntegration`: This folder contains the Unity portion of the application integration.
 
+To get the AROnPiJPEG scene to work correctly, select the ARToolKit object in the scene heirarchy, and modify the video config field for the OS you are using.
+The Pi Image script in this scene automatically saves a JPEG to "Assets/PiImages/Image.jpeg"
+The correct command top use this for AR input would be 
+
+-module=Image -loop -image="Assets/PiImages/Image.jpeg
+
+Example
+![alt text](AROnPiJPEGConfig.png)
+
+
+
 5. `testScripts`: This folder contains some preliminary scripts for testing and proof of concept ideas 
 - Frame Mocker: Pretends to be a Raspberry Pi and sends 'Camera frames' using an image
 - Multi-scaling Template Matching: Finds the PrarieSTEM lightbulb within an image
