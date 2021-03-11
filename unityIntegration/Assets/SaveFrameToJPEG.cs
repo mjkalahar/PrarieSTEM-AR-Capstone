@@ -27,7 +27,6 @@ public class SaveFrameToJPEG : MonoBehaviour
         this.camTexture.LoadImage(message);
         byte[] jpeg = ImageConversion.EncodeToJPG(this.camTexture);
         var dirPath = Application.dataPath + "/PiImages/";
-        UnityEngine.Debug.Log(dirPath);
         if (!Directory.Exists(dirPath))
         {
             Directory.CreateDirectory(dirPath);
