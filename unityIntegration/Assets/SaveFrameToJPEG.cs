@@ -7,7 +7,7 @@ using System.Threading;
 using NetMQ;
 using NetMQ.Sockets;
 
-public class TestDisplay : MonoBehaviour
+public class SaveFrameToJPEG : MonoBehaviour
 {
     private int port;
     private int offset = 10000;
@@ -26,7 +26,8 @@ public class TestDisplay : MonoBehaviour
     {
         this.camTexture.LoadImage(message);
         byte[] jpeg = ImageConversion.EncodeToJPG(this.camTexture);
-        var dirPath = Application.dataPath + "/../SaveImages/";
+        var dirPath = Application.dataPath + "/PiImages/";
+        UnityEngine.Debug.Log(dirPath);
         if (!Directory.Exists(dirPath))
         {
             Directory.CreateDirectory(dirPath);
