@@ -28,7 +28,7 @@ To get the AROnPiJPEG scene to work correctly, select the ARToolKit object in th
 The Pi Image script in this scene automatically saves a JPEG to "Assets/PiImages/Image.jpeg"
 The correct command top use this for AR input would be 
 
--module=Image -loop -image="Assets/PiImages/Image.jpeg
+-module=Image -loop -image="Assets/PiImages/Image.jpeg"
 
 Example
 
