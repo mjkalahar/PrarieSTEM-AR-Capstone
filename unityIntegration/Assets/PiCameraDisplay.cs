@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading;
 using NetMQ;
@@ -19,7 +20,7 @@ public class PiCameraDisplay : MonoBehaviour
     private int LIMIT = 1000;
     public Text AvgFPS;
     private float lastTime;
-    private List<int> FPSList;
+    private List<float> FPSList;
 
     Texture2D camTexture;
 
@@ -39,7 +40,7 @@ public class PiCameraDisplay : MonoBehaviour
         port = DropDownMenu.port;
         UnityEngine.Debug.Log(port);
 
-        FPSList = new List<int>();
+        FPSList = new List<float>();
         
         //initialize cam texture and get the raw image
         this.camTexture = new Texture2D(2, 2);
@@ -59,27 +60,34 @@ public class PiCameraDisplay : MonoBehaviour
         this.camTexture.LoadImage(message);
         screenDisplay.texture = camTexture;
 
-        float diffTime = Time.unscaledTime - lastTime;
-        int fps = (int)(1f / diffTime);
-        FPSText.text = "FPS: " + fps.ToString();
-        lastTime = Time.unscaledTime;
-
-        if(FPSList.Count > LIMIT)
+        float diffTime = Time.unscaledTime - lastTime; 
+        float fps = -1f;
+        if (diffTime > 0)
         {
-            FPSList.RemoveAt(0);
+            fps = 1f / diffTime;
+            FPSText.text = String.Format("FPS: {0:0.00}", fps);
+            lastTime = Time.unscaledTime;
+
+            if (fps >= 0)
+            {
+                if (FPSList.Count > LIMIT)
+                {
+                    FPSList.RemoveAt(0);
+                }
+
+                FPSList.Add(fps);
+
+                float total = 0;
+
+                FPSList.ForEach(delegate (float value)
+                {
+                    total += value;
+                });
+                float avg = total / FPSList.Count;
+
+                AvgFPS.text = String.Format("Average FPS: {0:0.00}", avg);
+            }
         }
-
-        FPSList.Add(fps);
-
-        float total = 0;
-
-        FPSList.ForEach(delegate (int value)
-        {
-            total += value;
-        });
-        int avg = (int)(total / FPSList.Count);
-
-        AvgFPS.text = "Average FPS: " + avg.ToString();
 
         Canvas.ForceUpdateCanvases();
     }
