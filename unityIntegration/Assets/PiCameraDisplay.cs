@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading;
 using NetMQ;
 using UnityEngine;
@@ -13,11 +14,12 @@ public class PiCameraDisplay : MonoBehaviour
     // The hardcoded (for now) pi IP and port
     private int port;
     private int offset = 10000;
-    private string serverIP = "tcp://ec2-13-58-201-148.us-east-2.compute.amazonaws.com:";
-
-    private int avgFrameRate;
+    private string serverIP = "tcp://ec2-18-234-222-246.compute-1.amazonaws.com:";
     public Text FPSText;
+    private int LIMIT = 1000;
+    public Text AvgFPS;
     private float lastTime;
+    private List<int> FPSList;
 
     Texture2D camTexture;
 
@@ -36,6 +38,8 @@ public class PiCameraDisplay : MonoBehaviour
         lastTime = Time.unscaledTime;
         port = DropDownMenu.port;
         UnityEngine.Debug.Log(port);
+
+        FPSList = new List<int>();
         
         //initialize cam texture and get the raw image
         this.camTexture = new Texture2D(2, 2);
@@ -54,10 +58,29 @@ public class PiCameraDisplay : MonoBehaviour
         
         this.camTexture.LoadImage(message);
         screenDisplay.texture = camTexture;
+
         float diffTime = Time.unscaledTime - lastTime;
         int fps = (int)(1f / diffTime);
         FPSText.text = "FPS: " + fps.ToString();
         lastTime = Time.unscaledTime;
+
+        if(FPSList.Count > LIMIT)
+        {
+            FPSList.RemoveAt(0);
+        }
+
+        FPSList.Add(fps);
+
+        float total = 0;
+
+        FPSList.ForEach(delegate (int value)
+        {
+            total += value;
+        });
+        int avg = (int)(total / FPSList.Count);
+
+        AvgFPS.text = "Average FPS: " + avg.ToString();
+
         Canvas.ForceUpdateCanvases();
     }
 
