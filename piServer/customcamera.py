@@ -1,6 +1,7 @@
 import picamera
 import io
 from threading import Thread
+from time import sleep
 
 
 class CameraDefaults:
@@ -107,11 +108,13 @@ def get_valid_stabilization():
 
 class CustomCamera:
     __camera_dictionary = dict()
-    __camera = picamera.PiCamera()
     __raw_data = io.BytesIO()
+    __camera = None
 
     def __init__(self, args):
         args = dict(args)
+        self.__camera = picamera.PiCamera()
+        sleep(1)
         self.initialize_dictionary()
         if "debug" in args:
             self.set_debug(args["debug"])
