@@ -215,25 +215,32 @@ def thread_function(new_port, protocol):
                         image = ZMQComm.get_pi_socket().recv()
 
                 if(image is not None):
+                    diff = 0
+                    fps = 0
+
                     timer.restart()
                     has_next = True
-                    new_time = time.time()
-                    diff = new_time - last_time
-                    last_time = time.time()
-                    fps = 1/diff
-
-                    if(len(fpsList) >= 1000):
-                        del fpsList[0]
-
-                    fpsList.append(fps)
                     
+                    diff = time.time() - last_time
+                    last_time = time.time()
+
+                    if(diff > 0):
+                        fps = 1/diff
+                        if(fps > 0):
+                            if(len(fpsList) >= 1000):
+                                del fpsList[0]
+
+                            fpsList.append(fps)
+
+                    if command_args["debug"]:
+                        if(len(fpsList) > 0):
+                            print_lock.acquire()
+                            averageFPS = sum(fpsList) / len(fpsList)
+                            print("Connection: {0}, Message length: {1}, Protocol: {2}, Current FPS: {3:.2f}, Average FPS: {4:.2f}".format(connection_name, len(image), protocol, fps, averageFPS))
+                            print_lock.release()                    
 
                     ZMQComm.get_socket_send().send(image)
-                    if command_args["debug"]:
-                        print_lock.acquire()
-                        averageFPS = sum(fpsList) / len(fpsList)
-                        print("Connection: {0}, Message length: {1}, Current FPS: {2:.2f}, Average FPS: {3:.2f}".format(connection_name, len(image), fps, averageFPS))
-                        print_lock.release()
+                    
                     if(protocol == "ImageZMQ"):
                         image_hub.send_reply(b'OK')
         dict_lock.acquire()
