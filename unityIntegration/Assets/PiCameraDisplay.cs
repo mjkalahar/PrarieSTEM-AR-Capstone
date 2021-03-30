@@ -70,7 +70,7 @@ public class PiCameraDisplay : MonoBehaviour
 
             if (fps >= 0)
             {
-                if (FPSList.Count > LIMIT)
+                if (FPSList.Count >= LIMIT)
                 {
                     FPSList.RemoveAt(0);
                 }
