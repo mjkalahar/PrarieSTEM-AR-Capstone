@@ -150,6 +150,13 @@ def thread_timer_free_up(port):
     dict_lock.acquire()
     connections[port]["active"] = False
     dict_lock.release()
+    print_lock.acquire()
+    print("Removing connection from list: {0} and port: {1}".format(connections[port]["connection_name"], port))
+    print_lock.release()
+    dict_lock.acquire()
+    del connections[port]
+    USED_PORTS.append(port)
+    dict_lock.release()
     return
 
 
@@ -243,10 +250,6 @@ def thread_function(new_port, protocol):
                     
                     if(protocol == "ImageZMQ"):
                         image_hub.send_reply(b'OK')
-        dict_lock.acquire()
-        del connections[new_port]
-        USED_PORTS.append(new_port)
-        dict_lock.release()
     return
 
 if command_args["debug"]:
