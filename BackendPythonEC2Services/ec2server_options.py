@@ -142,7 +142,7 @@ def thread_add_back():
         sleep(5 * 60)
         add_back_port()
 
-def thread_timer_free_up(port):
+def thread_timer_free_up(port, zmq):
     if command_args["debug"]:
         print_lock.acquire()
         print("Releasing connection: {0} and port: {1}".format(connections[port]["connection_name"], port))
@@ -150,13 +150,10 @@ def thread_timer_free_up(port):
     dict_lock.acquire()
     connections[port]["active"] = False
     dict_lock.release()
-    print_lock.acquire()
-    print("Removing connection from list: {0} and port: {1}".format(connections[port]["connection_name"], port))
-    print_lock.release()
-    dict_lock.acquire()
-    del connections[port]
-    USED_PORTS.append(port)
-    dict_lock.release()
+
+    if(zmq is not None):
+        zmq.close()
+
     return
 
 
@@ -195,8 +192,7 @@ def thread_function(new_port, protocol):
         connections[new_port]["connection_name"] = connection_name
         connections[new_port]["active"] = True
         dict_lock.release()
-        timer = CustomTimer(10, thread_timer_free_up, new_port)
-        timer.start()
+        
 
 
         #setup
@@ -205,51 +201,67 @@ def thread_function(new_port, protocol):
         if(protocol == "ImageZMQ"):
             connection_string = 'tcp://*:'+str(new_port)
             image_hub = imagezmq.ImageHub(open_port=connection_string)
-            
-        #loop connection
-        while connections[new_port]["active"]:
-            has_next = True
-            #read loop
-            while has_next:
-                has_next = False
-                image = None
-                if(protocol == "ImageZMQ"):
-                    pi_name, image = image_hub.recv_jpg()
+            timer = CustomTimer(10, thread_timer_free_up, new_port, image_hub)
+        else:
+            timer = CustomTimer(10, thread_timer_free_up, new_port, None)
 
-                if(protocol == "ZMQ"):
-                    poll = dict(ZMQComm.poll(5))
-                    if(ZMQComm.get_pi_socket() in poll):
-                        image = ZMQComm.get_pi_socket().recv()
+        timer.start()
 
-                if(image is not None):
-                    diff = 0
-                    fps = 0
-
-                    timer.restart()
-                    has_next = True
-                    
-                    diff = time.time() - last_time
-                    last_time = time.time()
-
-                    if(diff > 0):
-                        fps = 1/diff
-                        if(fps > 0):
-                            if(len(fpsList) >= 1000):
-                                del fpsList[0]
-
-                            fpsList.append(fps)
-
-                    if command_args["debug"]:
-                        if(len(fpsList) > 0):
-                            print_lock.acquire()
-                            averageFPS = sum(fpsList) / len(fpsList)
-                            print("Connection: {0}, Message length: {1}, Protocol: {2}, Current FPS: {3:.2f}, Average FPS: {4:.2f}".format(connection_name, len(image), protocol, fps, averageFPS))
-                            print_lock.release()                    
-
-                    ZMQComm.get_socket_send().send(image)
-                    
+        try:
+            #loop connection
+            while connections[new_port]["active"]:
+                has_next = True
+                #read loop
+                while has_next:
+                    has_next = False
+                    image = None
                     if(protocol == "ImageZMQ"):
-                        image_hub.send_reply(b'OK')
+                        pi_name, image = image_hub.recv_jpg()
+
+                    if(protocol == "ZMQ"):
+                        poll = dict(ZMQComm.poll(5))
+                        if(ZMQComm.get_pi_socket() in poll):
+                            image = ZMQComm.get_pi_socket().recv()
+
+                    if(image is not None):
+                        diff = 0
+                        fps = 0
+
+                        timer.restart()
+                        has_next = True
+                        
+                        diff = time.time() - last_time
+                        last_time = time.time()
+
+                        if(diff > 0):
+                            fps = 1/diff
+                            if(fps > 0):
+                                if(len(fpsList) >= 1000):
+                                    del fpsList[0]
+
+                                fpsList.append(fps)
+
+                        if command_args["debug"]:
+                            if(len(fpsList) > 0):
+                                print_lock.acquire()
+                                averageFPS = sum(fpsList) / len(fpsList)
+                                print("Connection: {0}, Message length: {1}, Protocol: {2}, Current FPS: {3:.2f}, Average FPS: {4:.2f}".format(connection_name, len(image), protocol, fps, averageFPS))
+                                print_lock.release()                    
+
+                        ZMQComm.get_socket_send().send(image)
+                        
+                        if(protocol == "ImageZMQ"):
+                            image_hub.send_reply(b'OK')
+        except Exception:
+            pass
+        finally:
+            print_lock.acquire()
+            print("Removing connection from list: {0} and port: {1}".format(connections[new_port]["connection_name"], new_port))
+            print_lock.release()
+            dict_lock.acquire()
+            del connections[new_port]
+            USED_PORTS.append(new_port)
+            dict_lock.release()           
     return
 
 if command_args["debug"]:
