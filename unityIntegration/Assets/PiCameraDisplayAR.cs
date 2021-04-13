@@ -20,12 +20,17 @@ public class PiCameraDisplayAR : MonoBehaviour
     public Text AvgFPS;
     private float lastTime;
     private List<float> FPSList;
+    private float startTime;
+    float howLong;
 
     Texture2D camTexture;
 
     RawImage screenDisplay;
     public GameObject arToolkit;
     public GameObject sceneRoot;
+    public GameObject gasSlider;
+    public GameObject timerSlider;
+    public GameObject restart;
 
     Canvas canvas;
 
@@ -38,6 +43,7 @@ public class PiCameraDisplayAR : MonoBehaviour
     private void Start()
     {
         lastTime = Time.unscaledTime;
+        startTime = Time.unscaledTime;
         port = DropDownMenu.port;
         UnityEngine.Debug.Log(port);
 
@@ -54,6 +60,9 @@ public class PiCameraDisplayAR : MonoBehaviour
         _netMqListener.Start();
         arToolkit.GetComponent<ARController>().StartAR();
         sceneRoot.GetComponent<AROrigin>().enabled = true;
+
+
+        howLong = timerSlider.GetComponent<Slider>().value * 60;
     }
 
     // This function handles the message
@@ -107,6 +116,13 @@ public class PiCameraDisplayAR : MonoBehaviour
     private void Update()
     {
         _netMqListener.Update();
+        float currentTime = Time.unscaledTime;
+        float elapsed = currentTime - startTime;
+        gasSlider.GetComponent<Slider>().value = 1 - (elapsed / howLong);
+        if(elapsed >= howLong)
+        {
+            restart.SetActive(true);
+        }
     }
 
     // Stop the listener on program halt
