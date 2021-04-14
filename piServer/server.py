@@ -1,23 +1,28 @@
-"""@package PyServer
-
-This is the starting point for the pyserver to send
-video feed back to the ec2 server.
-
-More details.
-"""
-
+import simplejpeg
+import sys
+import socket
+import cv2
+import numpy
+import json
 import argparse
-import customcamera
+from imutils.video import VideoStream
+import imagezmq
 from time import sleep
 import zmq
-import socket
+import customcamera
+
+INITIALIZE_CONNECTION_PORT = 5050
+COMM_PORT = 5051
+OFFSET = 10000
+DEBUG = True
+pi_name = None
+picam = None
+sender = None
+ec2_host = "ec2-54-164-70-144.compute-1.amazonaws.com"
 
 
-"""Entry point for pyserver
-Entry point for the pyserver. Will process arguments
-and establish the connection with the ec2 server.
-"""
 option_parse = argparse.ArgumentParser(description="Set up of Raspberry Pi Camera streaming module")
+option_parse.add_argument("--debug", type=bool, default=False, help="Shows debugging information", choices=[True, False])
 option_parse.add_argument("--resolution", type=str, default=customcamera.CameraDefaults.CAMERA_RESOLUTION_DEFAULT, help="Set the resolution of the camera", choices=customcamera.get_valid_resolutions())
 option_parse.add_argument("--framerate", type=int, default=customcamera.CameraDefaults.CAMERA_FRAMERATE_DEFAULT, help="Set the frame rate", choices=customcamera.get_valid_framerate())
 option_parse.add_argument("--hflip", type=bool, default=customcamera.CameraDefaults.CAMERA_HFLIP_DEFAULT, help="Set the h-flip value", choices=customcamera.get_valid_hflip())
@@ -30,15 +35,9 @@ option_parse.add_argument("--saturation", type=int, default=customcamera.CameraD
 option_parse.add_argument("--stabilization", type=int, default=customcamera.CameraDefaults.CAMERA_STABILIZATION_DEFAULT, help="Set the stabilization value", choices=customcamera.get_valid_stabilization())
 option_parse.add_argument("--debug", type=bool, default=customcamera.CameraDefaults.OTHER_DEBUG, help="Shows debugging information", choices=customcamera.get_valid_debug())
 
-args = vars(option_parse.parse_args())
-INITIALIZE_CONNECTION_PORT = 5050
-COMM_PORT = 5051
-OFFSET = 10000
-DEBUG = args["debug"]
-port_zmq = ""
-pi_name = None
-ec2_host = "ec2-13-58-201-148.us-east-2.compute.amazonaws.com"
+command_args = vars(option_parse.parse_args())
 
+DEBUG = command_args["debug"]
 
 class ZMQCommunication:
 
@@ -73,7 +72,6 @@ class ZMQCommunication:
         self.__pi_socket.close()
         self.__context.term()
 
-
 def get_pi_name():
     with open("pi_label.txt", "r") as f:
         name = f.readline()
@@ -86,48 +84,73 @@ def get_pi_name():
 
 def set_up_connection():
     port = ""
+    protocol = ""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock_init:
         sock_init.connect((ec2_host, INITIALIZE_CONNECTION_PORT))
 
         while True:
-            msg_port = sock_init.recv(16)
-            if len(msg_port) <= 0:
+            incoming = sock_init.recv(64)
+            if len(incoming) <= 0:
                 break
-            port += msg_port.decode("utf-8")
-
+            info = json.loads(incoming.decode("utf-8"))
+            port += info['port']
+            protocol += info['protocol']
     if not port:
         raise ConnectionError("Error setting up port for connection")
-    return int(port)
+    return int(port), protocol
 
 
 try:
     pi_name = get_pi_name()
-    zmq_port = set_up_connection()
+    zmq_port, protocol = set_up_connection() 
     sleep(2)
     with ZMQCommunication(zmq_port) as ZMQComm:
-        with customcamera.CustomCamera(args) as cam:
-            ZMQComm.get_socket_comm().send_string(pi_name)
-            cam.start()
-            sleep(1)
+        ZMQComm.get_socket_comm().send_string(pi_name)
+        sleep(1)
+        if(protocol == "ZMQ"):
+            print("Sending images with ZMQ!")
+            with customcamera.CustomCamera(command_args) as cam:
+                cam.start()
+                sleep(1)
+                if DEBUG:
+                    count_frame = 0
+                    print("ZMQ_PORT:", zmq_port, "PI_NAME:", pi_name)
+                while cam.is_stopped():
+                    has_next = True
+                    while has_next:
+                        has_next = False
+                        if ZMQComm.get_socket_comm() in dict(ZMQComm.poll(50)):
+                            has_next = True
+                            msg = ZMQComm.get_socket_comm().recv()
+                            print("Socket Comm has a message")
+
+                    ZMQComm.get_pi_socket().send(cam.get_frame())
+
+        if(protocol == "ImageZMQ"):
+            print("Sending images with ImageZMQ!")
+            picam = VideoStream(usePiCamera=True).start()
+            connection_string = 'tcp://' + ec2_host + ':' + str(zmq_port)
+            sender = imagezmq.ImageSender(connect_to=connection_string)
             if DEBUG:
                 count_frame = 0
                 print("ZMQ_PORT:", zmq_port, "PI_NAME:", pi_name)
-            while cam.is_stopped():
-                has_next = True
-                while has_next:
-                    has_next = False
-                    if ZMQComm.get_socket_comm() in dict(ZMQComm.poll(50)):
-                        has_next = True
-                        msg = ZMQComm.get_socket_comm().recv()
-                        print("Socket Comm has a message")
-
-                ZMQComm.get_pi_socket().send(cam.get_frame())
-
-                # AI processing could go here in the future since the frame capture is on a separate thread
-
-                if DEBUG:
-                    print("Sent: %s" % count_frame)
-                    count_frame = (count_frame + 1) % 100
-
+        
+            sleep(2.0)
+            jpeg_quality = 95
+            has_next = True
+            while has_next:
+                has_next = False
+                if ZMQComm.get_socket_comm() in dict(ZMQComm.poll(50)):
+                    has_next = True
+                    msg = ZMQComm.get_socket_comm().recv()
+                    print("Socket Comm has a message")
+            while True:
+                image = picam.read()
+                jpg_buffer = simplejpeg.encode_jpeg(image, quality=jpeg_quality, colorspace='BGR')
+                sender.send_jpg(pi_name, jpg_buffer)
 finally:
+    if picam is not None:
+        picam.stop()
+    if sender is not None:
+        sender.close()
     pass

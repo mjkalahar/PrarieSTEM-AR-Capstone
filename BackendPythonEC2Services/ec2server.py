@@ -1,8 +1,14 @@
 import zmq
 import socket
+import sys
 import threading
-import argparse
+import numpy as np
+import cv2
 import json
+import imagezmq
+import argparse
+import simplejpeg
+import time
 from time import sleep
 
 OFFSET = 10000
@@ -17,22 +23,25 @@ connections = dict()
 print_lock = threading.Lock()
 dict_lock = threading.Lock()
 
+ec2_host = "ec2-34-201-129-143.compute-1.amazonaws.com"
+
 option_parse = argparse.ArgumentParser(description="Set up of EC2 server")
 option_parse.add_argument("--debug", type=bool, default=False, help="Shows debugging information", choices=[True, False])
 option_parse.add_argument("--data", type=bool, default=True, help="blocks data temporarily for ec2", choices=[True, False])
+option_parse.add_argument("--protocol", type=str, default="ImageZMQ", help="change the protocol used to send images", choices=["ImageZMQ", "ZMQ"])
 
 command_args = vars(option_parse.parse_args())
 
-
 class ZMQCommunication:
-    
-    def __init__(self, port):
+    def __init__(self, port, protocol):
         self.__context = zmq.Context()
+        self.__protocol = protocol
         # receive from pi
-        self.__pi_socket = self.__context.socket(zmq.SUB)
-        self.__pi_socket.setsockopt_string(zmq.SUBSCRIBE, "")
-        self.__pi_socket.set_hwm(1)
-        self.__pi_socket.bind("tcp://*:{0}".format(port))
+        if(self.__protocol == "ZMQ"):
+        	self.__pi_socket = self.__context.socket(zmq.SUB)
+        	self.__pi_socket.setsockopt_string(zmq.SUBSCRIBE, "")
+        	self.__pi_socket.set_hwm(1)
+        	self.__pi_socket.bind("tcp://*:{0}".format(port))
         # comm with pi
         self.__socket_comm = self.__context.socket(zmq.PAIR)
         self.__socket_comm.bind("tcp://*:{0}".format(port + (OFFSET * 2)))
@@ -43,7 +52,8 @@ class ZMQCommunication:
         # poller
         self.__poller = zmq.Poller()
         self.__poller.register(self.__socket_comm, zmq.POLLIN)
-        self.__poller.register(self.__pi_socket, zmq.POLLIN)
+        if(self.__protocol == "ZMQ"):
+        	self.__poller.register(self.__pi_socket, zmq.POLLIN)
         self.__poller.register(self.__socket_send, zmq.POLLIN)
 
     def poll(self, timeout=0):
@@ -54,7 +64,7 @@ class ZMQCommunication:
 
     def get_pi_socket(self):
         return self.__pi_socket
-    
+
     def get_socket_send(self):
         return self.__socket_send
 
@@ -63,10 +73,10 @@ class ZMQCommunication:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.__socket_comm.close()
-        self.__pi_socket.close()
+        if(self.__protocol == "ZMQ"):
+        	self.__pi_socket.close()
         self.__socket_send.close()
         self.__context.term()
-
 
 class CustomTimer(object):
 
@@ -91,13 +101,11 @@ class CustomTimer(object):
         self.cancel()
         self.start()
 
-
 def get_active_connections():
     ret_list = []
     for key in connections:
         ret_list.append({"Name": connections[key]["connection_name"], "Port": key})
     return json.dumps(ret_list)
-
 
 def find_new_port():
     new_port = STARTING_PORT
@@ -108,7 +116,6 @@ def find_new_port():
         new_port += 1
     return int(new_port)
 
-
 def add_back_port():
     if command_args["debug"]:
         print_lock.acquire()
@@ -118,7 +125,6 @@ def add_back_port():
         AVAILABLE_PORTS.append(port)
     AVAILABLE_PORTS.sort()
 
-
 def thread_available_connections():
     try:
         context = zmq.Context()
@@ -127,20 +133,16 @@ def thread_available_connections():
         socket_send_data.bind("tcp://*:{0}".format(GET_AVAILABLE_CONNECTIONS_PORT))
         while True:
             sleep(2)
-            # print(get_active_connections())
             socket_send_data.send_json(get_active_connections())
     finally:
         context.term()
-
-
 
 def thread_add_back():
     while True:
         sleep(5 * 60)
         add_back_port()
 
-
-def thread_timer_free_up(port):
+def thread_timer_free_up(port, zmq):
     if command_args["debug"]:
         print_lock.acquire()
         print("Releasing connection: {0} and port: {1}".format(connections[port]["connection_name"], port))
@@ -148,6 +150,10 @@ def thread_timer_free_up(port):
     dict_lock.acquire()
     connections[port]["active"] = False
     dict_lock.release()
+
+    if(zmq is not None):
+        zmq.close()
+
     return
 
 
@@ -160,17 +166,21 @@ def establish_connection(connection, ip, port):
         print("IP: ", ip, "Port: ", port, "ZMQ_Port:", new_port)
         print_lock.release()
     with connection:
-        connection.sendall(str(new_port).encode("utf-8"))
+        ret = {
+            "port": str(new_port),
+            "protocol": command_args['protocol']
+        }
+        connection.sendall(str(json.dumps(ret)).encode("utf-8"))
     if command_args["debug"]:
         print_lock.acquire()
         print("Connection handled")
         print_lock.release()
-    threading.Thread(target=thread_function(new_port), args=(new_port,)).start()
+    threading.Thread(target=thread_function(new_port, command_args['protocol']), args=(new_port, command_args['protocol'])).start()
     return
 
-
-def thread_function(new_port):
-    with ZMQCommunication(new_port) as ZMQComm:
+def thread_function(new_port, protocol):
+    fpsList = []
+    with ZMQCommunication(new_port, protocol) as ZMQComm:
         connection_name = str(ZMQComm.get_socket_comm().recv_string())
         if command_args["debug"]:
             print_lock.acquire()
@@ -182,33 +192,77 @@ def thread_function(new_port):
         connections[new_port]["connection_name"] = connection_name
         connections[new_port]["active"] = True
         dict_lock.release()
-        timer = CustomTimer(10, thread_timer_free_up, new_port)
+        
+
+
+        #setup
+        last_time = time.time()
+
+        if(protocol == "ImageZMQ"):
+            connection_string = 'tcp://*:'+str(new_port)
+            image_hub = imagezmq.ImageHub(open_port=connection_string)
+            timer = CustomTimer(10, thread_timer_free_up, new_port, image_hub)
+        else:
+            timer = CustomTimer(10, thread_timer_free_up, new_port, None)
+
         timer.start()
-        while connections[new_port]["active"]:
-            has_next = True
-            while has_next:
-                has_next = False
-                poll = dict(ZMQComm.poll(5))
-                if ZMQComm.get_pi_socket() in poll:
-                    timer.restart()
-                    has_next = True
-                    msg = ZMQComm.get_pi_socket().recv()
-                    ZMQComm.get_socket_send().send(msg)
-                    if command_args["debug"]:
-                        print_lock.acquire()
-                        print("The connection: {0}, has message length: {1}".format(connection_name, len(msg)))
-                        print_lock.release()
-                if ZMQComm.get_socket_comm() in poll:
-                    print_lock.acquire()
-                    print("Information from the comm socket to handle")
-                    print_lock.release()
 
-        dict_lock.acquire()
-        del connections[new_port]
-        USED_PORTS.append(new_port)
-        dict_lock.release()
+        try:
+            #loop connection
+            while connections[new_port]["active"]:
+                has_next = True
+                #read loop
+                while has_next:
+                    has_next = False
+                    image = None
+                    if(protocol == "ImageZMQ"):
+                        pi_name, image = image_hub.recv_jpg()
+
+                    if(protocol == "ZMQ"):
+                        poll = dict(ZMQComm.poll(5))
+                        if(ZMQComm.get_pi_socket() in poll):
+                            image = ZMQComm.get_pi_socket().recv()
+
+                    if(image is not None):
+                        diff = 0
+                        fps = 0
+
+                        timer.restart()
+                        has_next = True
+                        
+                        diff = time.time() - last_time
+                        last_time = time.time()
+
+                        if(diff > 0):
+                            fps = 1/diff
+                            if(fps > 0):
+                                if(len(fpsList) >= 1000):
+                                    del fpsList[0]
+
+                                fpsList.append(fps)
+
+                        if command_args["debug"]:
+                            if(len(fpsList) > 0):
+                                print_lock.acquire()
+                                averageFPS = sum(fpsList) / len(fpsList)
+                                print("Connection: {0}, Message length: {1}, Protocol: {2}, Current FPS: {3:.2f}, Average FPS: {4:.2f}".format(connection_name, len(image), protocol, fps, averageFPS))
+                                print_lock.release()                    
+
+                        ZMQComm.get_socket_send().send(image)
+                        
+                        if(protocol == "ImageZMQ"):
+                            image_hub.send_reply(b'OK')
+        except Exception:
+            pass
+        finally:
+            print_lock.acquire()
+            print("Removing connection from list: {0} and port: {1}".format(connections[new_port]["connection_name"], new_port))
+            print_lock.release()
+            dict_lock.acquire()
+            del connections[new_port]
+            USED_PORTS.append(new_port)
+            dict_lock.release()           
     return
-
 
 if command_args["debug"]:
     print_lock.acquire()
