@@ -21,7 +21,7 @@ public class PiCameraDisplayAR : MonoBehaviour
     private float lastTime;
     private List<float> FPSList;
     private float startTime;
-    float howLong;
+    float timeLimit;
 
     Texture2D camTexture;
 
@@ -62,7 +62,11 @@ public class PiCameraDisplayAR : MonoBehaviour
         sceneRoot.GetComponent<AROrigin>().enabled = true;
 
 
-        howLong = timerSlider.GetComponent<Slider>().value * 60;
+        float timerSliderValue = timerSlider.GetComponent<Slider>().value;
+        if (timerSliderValue > 0)
+            timeLimit = timerSliderValue * 60;
+        else
+            timeLimit = 0;
     }
 
     // This function handles the message
@@ -116,12 +120,16 @@ public class PiCameraDisplayAR : MonoBehaviour
     private void Update()
     {
         _netMqListener.Update();
-        float currentTime = Time.unscaledTime;
-        float elapsed = currentTime - startTime;
-        gasSlider.GetComponent<Slider>().value = 1 - (elapsed / howLong);
-        if(elapsed >= howLong)
+
+        if (timeLimit > 0)
         {
-            restart.SetActive(true);
+            float currentTime = Time.unscaledTime;
+            float elapsed = currentTime - startTime;
+            gasSlider.GetComponent<Slider>().value = 1 - (elapsed / timeLimit);
+            if (elapsed >= timeLimit)
+            {
+                restart.SetActive(true);
+            }
         }
     }
 

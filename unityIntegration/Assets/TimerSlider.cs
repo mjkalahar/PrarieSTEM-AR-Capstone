@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TimerSlider : MonoBehaviour
 {
     Slider timerSlider;
-    float value = 5;
+    float value = 1;
     // Start is called before the first frame update
     void Start()
     {
