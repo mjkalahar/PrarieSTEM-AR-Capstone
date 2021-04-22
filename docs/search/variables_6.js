@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['initialize_5fconnection_5fport_227',['INITIALIZE_CONNECTION_PORT',['../namespaceserver.html#a74b7cb11c5d99c9ceeaf4be7c0cecd83',1,'server.INITIALIZE_CONNECTION_PORT()'],['../namespaceserver__imagezmq.html#a588e13e428188f5cb2d57aac2e9bb437',1,'server_imagezmq.INITIALIZE_CONNECTION_PORT()']]],
-  ['int_228',['int',['../namespaceserver.html#a803365d66cd8c1e68f7e41a1837a59f4',1,'server']]]
+  ['gasslider_303',['gasSlider',['../class_pi_camera_display_a_r.html#a23bb3d17b274552a582c8840d2b67ed5',1,'PiCameraDisplayAR']]],
+  ['get_5favailable_5fconnections_5fport_304',['GET_AVAILABLE_CONNECTIONS_PORT',['../namespaceec2server.html#a17655b81c5e0fd195488f4140d0777d8',1,'ec2server']]]
 ];

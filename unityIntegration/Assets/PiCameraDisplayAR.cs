@@ -9,6 +9,9 @@ using NetMQ.Sockets;
 using System.Diagnostics;
 using UnityEngine.UI;
 
+/**
+* Class for displaying video feed from server, modified version to save image locally for AR usage and overlay objects
+*/
 public class PiCameraDisplayAR : MonoBehaviour
 {
     // The hardcoded (for now) pi IP and port
@@ -39,7 +42,11 @@ public class PiCameraDisplayAR : MonoBehaviour
     //in this instance the "messageDelegate" is the HandleMessage function
     private NetMqListener _netMqListener;
 
-    // Script Start
+    /**
+    * Start is called before the first frame update
+    * Set up our connection using the value of the dropdown, set up listener for handling messages, setup our canvas and display for displaying the texture
+    * Set up our AR and get our overlay objects ready (Battery bar and FPS/Average FPS)
+    */ 
     private void Start()
     {
         lastTime = Time.unscaledTime;
@@ -54,36 +61,45 @@ public class PiCameraDisplayAR : MonoBehaviour
         this.screenDisplay = GetComponent<RawImage>();
         this.canvas = GetComponent<Canvas>();
 
-
         // Create and start listener object
         _netMqListener = new NetMqListener(HandleMessage, serverIP + (port + offset));
         _netMqListener.Start();
+
+        //Start our AR and enable the origin scene for AR
         arToolkit.GetComponent<ARController>().StartAR();
         sceneRoot.GetComponent<AROrigin>().enabled = true;
 
 
+        //Get value from settings screen for time limit
         float timerSliderValue = timerSlider.GetComponent<Slider>().value;
+        // If not 0, multiply value by 60 for seconds
         if (timerSliderValue > 0)
             timeLimit = timerSliderValue * 60;
         else
             timeLimit = 0;
     }
 
-    // This function handles the message
-    // This is where we should put logic to display the image
+    /**
+    * This function handles the message
+    * This is where we should put logic to display the image
+    * In this version this is modified to save image locally
+    * @param message Contains the byte[] of incoming data
+    */ 
     private void HandleMessage(byte[] message)
     {
-
+        //Load image into intermediate
         this.camTexture.LoadImage(message);
+        //Encode the byte array data into JPGE
         byte[] jpeg = ImageConversion.EncodeToJPG(this.camTexture);
+        //Save image locally
         var dirPath = Application.dataPath + "/PiImages/";
         if (!Directory.Exists(dirPath))
         {
             Directory.CreateDirectory(dirPath);
         }
         File.WriteAllBytes(dirPath + "Image" + ".jpeg", jpeg);
-        //4screenDisplay.texture = camTexture;
 
+        //FPS calculations and format display
         float diffTime = Time.unscaledTime - lastTime;
         float fps = -1f;
         if (diffTime > 0)
@@ -116,7 +132,12 @@ public class PiCameraDisplayAR : MonoBehaviour
         Canvas.ForceUpdateCanvases();
     }
 
-    // When our scripts update function is called, we update the listener
+    /**
+    * Update is called every frame
+    * Call update on our listener
+    * Update values for use with the gasSlider (Battery bar) that will slowly decrease it
+    * If our time limit has been reached, enable the restart game object
+    */ 
     private void Update()
     {
         _netMqListener.Update();
@@ -133,7 +154,10 @@ public class PiCameraDisplayAR : MonoBehaviour
         }
     }
 
-    // Stop the listener on program halt
+    /**
+    * OnDestroy is called when the game object is destroyed
+    * Stop our listener
+    */ 
     private void OnDestroy()
     {
         _netMqListener.Stop();

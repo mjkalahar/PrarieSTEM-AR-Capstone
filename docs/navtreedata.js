@@ -24,7 +24,8 @@
 */
 var NAVTREE =
 [
-  [ "PrarieSTEM AR Capstone", "index.html", [
+  [ "PraireSTEM AR Capstone", "index.html", [
+    [ "This is the EC2 proxy portion of the project.", "md__backend_python_e_c2_services__r_e_a_d_m_e.html", null ],
     [ "This is the raspberry Pi portion of the project.", "md_pi_server__r_e_a_d_m_e.html", null ],
     [ "Packages", "namespaces.html", [
       [ "Packages", "namespaces.html", "namespaces_dup" ],
@@ -52,7 +53,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"annotated.html"
+"_drop_down_menu_8cs.html",
+"server_8py.html#a13156c471a84add42a1a3ddb964ea3bc"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

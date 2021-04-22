@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['pi_5fname_232',['pi_name',['../namespaceserver.html#a13156c471a84add42a1a3ddb964ea3bc',1,'server.pi_name()'],['../namespaceserver__imagezmq.html#af24280826a1f36ca77acdc6b7b43bf17',1,'server_imagezmq.pi_name()']]],
-  ['picam_233',['picam',['../namespaceserver__imagezmq.html#ac2654980e273aa2c733ae6d31a5b0a91',1,'server_imagezmq']]],
-  ['port_5fzmq_234',['port_zmq',['../namespaceserver.html#a9e920baf4ec436564100d60d16ba556a',1,'server']]]
+  ['incoming_5faddress_306',['incoming_address',['../namespaceec2server.html#aaca6a1804cb42ad6c6cbb0cc41a68885',1,'ec2server']]],
+  ['incoming_5fconnection_307',['incoming_connection',['../namespaceec2server.html#a85bdfea138599564ba51b72f7d2cd749',1,'ec2server']]],
+  ['initialize_5fconnection_5fport_308',['INITIALIZE_CONNECTION_PORT',['../namespaceec2server.html#ac40279bf0a6bf7804587c5d11a3aaf4d',1,'ec2server.INITIALIZE_CONNECTION_PORT()'],['../namespaceserver.html#a74b7cb11c5d99c9ceeaf4be7c0cecd83',1,'server.INITIALIZE_CONNECTION_PORT()']]],
+  ['int_309',['int',['../namespaceserver.html#a803365d66cd8c1e68f7e41a1837a59f4',1,'server']]]
 ];

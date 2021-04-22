@@ -1,9 +1,8 @@
 var server_8py =
 [
-    [ "ZMQCommunication", "classserver_1_1_z_m_q_communication.html", "classserver_1_1_z_m_q_communication" ],
+    [ "ZMQCommunication", "classserver_1_1_z_m_q_communication.html", null ],
     [ "get_pi_name", "server_8py.html#aef1e66aade5d79dcd2bb58a89218eb90", null ],
     [ "set_up_connection", "server_8py.html#a0c420c1204a2447d191eef342a9e828a", null ],
-    [ "args", "server_8py.html#aea7e1efc19535ee9bab8400a812b43a9", null ],
     [ "bool", "server_8py.html#a8e03e8217aa728e71f7cc0f41326b129", null ],
     [ "CAMERA_BRIGHTNESS_DEFAULT", "server_8py.html#a270e6a8b662eab9622ac8017c6f62e7e", null ],
     [ "CAMERA_CONTRAST_DEFAULT", "server_8py.html#abaa81eaf3140335f5c957bb981de863b", null ],
@@ -17,9 +16,11 @@ var server_8py =
     [ "CAMERA_VFLIP_DEFAULT", "server_8py.html#aebf01ee703dbbd5cff9f4d856c5fac32", null ],
     [ "choices", "server_8py.html#ae4a8d678a19d6933d287fa5acbe0334d", null ],
     [ "COMM_PORT", "server_8py.html#a97847c2c3e3b9be113c7537f7398e1cb", null ],
+    [ "command_args", "server_8py.html#aea4336f7bb2aa45fd342b3df105eca73", null ],
     [ "DEBUG", "server_8py.html#a4f8abe5e41727de7cb88d5f2a826cdcb", null ],
     [ "default", "server_8py.html#a70ecbc33459e4c393ccddd6f1d1bcc04", null ],
     [ "ec2_host", "server_8py.html#a6b170410aaad0183e068b7542cb76a57", null ],
+    [ "False", "server_8py.html#af376ea412d457adf4aae4f2550260a9b", null ],
     [ "help", "server_8py.html#a692f59b384dd93287c366eb7e7c0608b", null ],
     [ "INITIALIZE_CONNECTION_PORT", "server_8py.html#a74b7cb11c5d99c9ceeaf4be7c0cecd83", null ],
     [ "int", "server_8py.html#a803365d66cd8c1e68f7e41a1837a59f4", null ],
@@ -27,7 +28,8 @@ var server_8py =
     [ "option_parse", "server_8py.html#a2cab3909f9651e7cd27067277c47c199", null ],
     [ "OTHER_DEBUG", "server_8py.html#abec3b4583aa2bf7a35bd8bebceddf0b5", null ],
     [ "pi_name", "server_8py.html#a13156c471a84add42a1a3ddb964ea3bc", null ],
-    [ "port_zmq", "server_8py.html#a9e920baf4ec436564100d60d16ba556a", null ],
+    [ "picam", "server_8py.html#a248ca6925fe135fabc84b72818e20164", null ],
+    [ "sender", "server_8py.html#a0af2c1d415b808b800961617b350370b", null ],
     [ "str", "server_8py.html#a025d0d398f42f8e1e66f77582fb6eace", null ],
     [ "type", "server_8py.html#a72aa2cd67bf6ea46a0eea394a62534a2", null ]
 ];

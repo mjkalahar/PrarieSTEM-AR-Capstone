@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['server_141',['server',['../namespaceserver.html',1,'']]],
-  ['server_5fimagezmq_142',['server_imagezmq',['../namespaceserver__imagezmq.html',1,'']]]
+  ['otherfunctions_195',['otherFunctions',['../namespaceother_functions.html',1,'']]]
 ];

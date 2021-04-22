@@ -1,23 +1,11 @@
 var searchData=
 [
-  ['server_75',['server',['../namespaceserver.html',1,'']]],
-  ['server_2epy_76',['server.py',['../server_8py.html',1,'']]],
-  ['server_5fimagezmq_77',['server_imagezmq',['../namespaceserver__imagezmq.html',1,'']]],
-  ['server_5fimagezmq_2epy_78',['server_imagezmq.py',['../server__imagezmq_8py.html',1,'']]],
-  ['set_5fbrightness_79',['set_brightness',['../classcustomcamera_1_1_custom_camera.html#a9c06c64f6116d938145da4a585dc9610',1,'customcamera::CustomCamera']]],
-  ['set_5fcontrast_80',['set_contrast',['../classcustomcamera_1_1_custom_camera.html#a022fd6030906a6734a20f67fe979c5a9',1,'customcamera::CustomCamera']]],
-  ['set_5fdebug_81',['set_debug',['../classcustomcamera_1_1_custom_camera.html#afa022f8adf58c64a0cc5dbdbce8fa4d1',1,'customcamera.CustomCamera.set_debug()'],['../classother_functions_1_1_other_functions.html#a0a44ada2e8d4a15d1b99a41ee74921e5',1,'otherFunctions.OtherFunctions.set_debug()']]],
-  ['set_5fframerate_82',['set_framerate',['../classcustomcamera_1_1_custom_camera.html#add4bdb191f89d02971ebd5cf20816939',1,'customcamera::CustomCamera']]],
-  ['set_5fhflip_83',['set_hflip',['../classcustomcamera_1_1_custom_camera.html#aa0c49cbc4cb8a6d1601abb27482c2c02',1,'customcamera::CustomCamera']]],
-  ['set_5fip_84',['set_ip',['../classother_functions_1_1_other_functions.html#ae755317a581ecc9730c1558487329122',1,'otherFunctions::OtherFunctions']]],
-  ['set_5fiso_85',['set_iso',['../classcustomcamera_1_1_custom_camera.html#a9049193d487abbd3f6ef4ae26ab7b793',1,'customcamera::CustomCamera']]],
-  ['set_5fresolution_86',['set_resolution',['../classcustomcamera_1_1_custom_camera.html#a6817a0b013c1efcba1c0e5912d043a28',1,'customcamera::CustomCamera']]],
-  ['set_5frotation_87',['set_rotation',['../classcustomcamera_1_1_custom_camera.html#a95407e197a0d38006bb5de55f701e121',1,'customcamera::CustomCamera']]],
-  ['set_5fsaturation_88',['set_saturation',['../classcustomcamera_1_1_custom_camera.html#a5b7634cf6fd8a9b3ba932351973ada2a',1,'customcamera::CustomCamera']]],
-  ['set_5fstabilization_89',['set_stabilization',['../classcustomcamera_1_1_custom_camera.html#a3cbcd8c7723980d3c70b75fbb7f3cbec',1,'customcamera::CustomCamera']]],
-  ['set_5fup_5fconnection_90',['set_up_connection',['../namespaceserver.html#a0c420c1204a2447d191eef342a9e828a',1,'server.set_up_connection()'],['../namespaceserver__imagezmq.html#a882414e63af51e12395a2225f10f3ec7',1,'server_imagezmq.set_up_connection()']]],
-  ['set_5fvflip_91',['set_vflip',['../classcustomcamera_1_1_custom_camera.html#ac80c4d509e2a3159b5185b27b9f21651',1,'customcamera::CustomCamera']]],
-  ['start_92',['start',['../classcustomcamera_1_1_custom_camera.html#a4e9c232fa7d6d5baaa4cacda9b43df06',1,'customcamera::CustomCamera']]],
-  ['stop_93',['stop',['../classcustomcamera_1_1_custom_camera.html#ad08cd8486cbc9881b49ae24d4897d107',1,'customcamera::CustomCamera']]],
-  ['str_94',['str',['../namespaceserver.html#a025d0d398f42f8e1e66f77582fb6eace',1,'server']]]
+  ['offset_83',['OFFSET',['../namespaceec2server.html#afde0fb87d6c7c7446004b67882ede316',1,'ec2server.OFFSET()'],['../namespaceserver.html#acc9f8ac87479dee4a34486aa94b0e1f7',1,'server.OFFSET()']]],
+  ['option_5fparse_84',['option_parse',['../namespaceec2server.html#a4ad548a850b5fbe1deafb84d2afccd8e',1,'ec2server.option_parse()'],['../namespaceserver.html#a2cab3909f9651e7cd27067277c47c199',1,'server.option_parse()']]],
+  ['other_5fdebug_85',['OTHER_DEBUG',['../classother_functions_1_1_other_defaults.html#a3034af423f5f77fe110de30cd03f13c9',1,'otherFunctions.OtherDefaults.OTHER_DEBUG()'],['../namespaceserver.html#abec3b4583aa2bf7a35bd8bebceddf0b5',1,'server.OTHER_DEBUG()']]],
+  ['other_5fdictionary_86',['other_dictionary',['../classother_functions_1_1_other_functions.html#ad75fd5de51ce8408bb05232fb040d7b0',1,'otherFunctions::OtherFunctions']]],
+  ['otherdefaults_87',['OtherDefaults',['../classother_functions_1_1_other_defaults.html',1,'otherFunctions']]],
+  ['otherfunctions_88',['otherFunctions',['../namespaceother_functions.html',1,'']]],
+  ['otherfunctions_89',['OtherFunctions',['../classother_functions_1_1_other_functions.html',1,'otherFunctions']]],
+  ['otherfunctions_2epy_90',['otherFunctions.py',['../other_functions_8py.html',1,'']]]
 ];

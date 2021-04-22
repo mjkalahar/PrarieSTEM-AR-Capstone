@@ -5,6 +5,9 @@ from time import sleep
 
 
 class CameraDefaults:
+"""
+Default values for camera initialization
+"""
     CAMERA_RESOLUTION_DEFAULT = "480p"
     CAMERA_FRAMERATE_DEFAULT = 60
     CAMERA_HFLIP_DEFAULT = False
@@ -107,11 +110,17 @@ def get_valid_stabilization():
 
 
 class CustomCamera:
+    """
+    Custom camera module for accessing Pi Camera with various settings
+    """
     __camera_dictionary = dict()
     __raw_data = io.BytesIO()
     __camera = None
 
     def __init__(self, args):
+        """
+        Initialize Pi camera using custom parameter values
+        """
         args = dict(args)
         self.__camera = picamera.PiCamera()
         sleep(1)
@@ -146,11 +155,17 @@ class CustomCamera:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """
+        Exit camera module, dispose of resources
+        """
         self.stop()
         self.__camera.close()
         self.__raw_data.close()
 
     def initialize_dictionary(self):
+        """
+        Initalize custom camera settings with default values
+        """
         self.__camera_dictionary["resolution"] = CameraDefaults.CAMERA_RESOLUTION_DEFAULT
         self.__camera.resolution = (854, 480)
         self.__camera_dictionary["framerate"] = CameraDefaults.CAMERA_FRAMERATE_DEFAULT

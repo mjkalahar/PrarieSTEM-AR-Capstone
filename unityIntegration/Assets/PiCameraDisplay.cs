@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading;
 using NetMQ;
+using System.IO;
 using UnityEngine;
 using NetMQ.Sockets;
 using System.Diagnostics;
 using UnityEngine.UI;
 
+/**
+* Class for displaying video feed from server onto the Unity Scene
+*/
+
 public class PiCameraDisplay : MonoBehaviour
 {
-
 
     // The hardcoded (for now) pi IP and port
     private int port;
     private int offset = 10000;
-    private string serverIP = "tcp://ec2-18-234-222-246.compute-1.amazonaws.com:";
+    private string serverIP = "tcp://ec2-54-164-70-144.compute-1.amazonaws.com:";
     public Text FPSText;
     private int LIMIT = 1000;
     public Text AvgFPS;
@@ -33,7 +37,10 @@ public class PiCameraDisplay : MonoBehaviour
     //in this instance the "messageDelegate" is the HandleMessage function
     private NetMqListener _netMqListener;
 
-    // Script Start
+    /**
+    * Start is called before the first frame update
+    * Set up our connection using the value of the dropdown, set up listener for handling messages, setup our canvas and display for displaying the texture
+    */ 
     private void Start()
     {
         lastTime = Time.unscaledTime;
@@ -52,14 +59,18 @@ public class PiCameraDisplay : MonoBehaviour
         _netMqListener.Start();
     }
 
-    // This function handles the message
-    // This is where we should put logic to display the image
+    /**
+    * This function handles the message
+    * This is where we should put logic to display the image
+    * @param message Contains the byte[] of incoming data
+    */ 
     private void HandleMessage(byte[] message)
     {
-        
+        //Load our image onto the texture in the scene
         this.camTexture.LoadImage(message);
         screenDisplay.texture = camTexture;
 
+        //FPS calculations
         float diffTime = Time.unscaledTime - lastTime; 
         float fps = -1f;
         if (diffTime > 0)
@@ -92,22 +103,31 @@ public class PiCameraDisplay : MonoBehaviour
         Canvas.ForceUpdateCanvases();
     }
 
-    // When our scripts update function is called, we update the listener
+    /**
+    * Update is called every frame
+    * Call update on our listener
+    */ 
     private void Update()
     {
         _netMqListener.Update();
     }
 
-    // Stop the listener on program halt
+    /**
+    * OnDestroy is called when the game object is destroyed
+    * Stop our listener
+    */ 
     private void OnDestroy()
     {
         _netMqListener.Stop();
     }
 }
 
-// This is an object that spins up a thread to manage the socket connection
-//and then hands off the data to a "messageDelegate" that handles the data
-//in this instance the "messageDelegate" is the HandleMessage function
+
+/**
+* This is an object that spins up a thread to manage the socket connection
+* and then hands off the data to a "messageDelegate" that handles the data
+* in this instance the "messageDelegate" is the HandleMessage function
+*/  
 public class NetMqListener
 {
     // The listenerWorker is a thread that manages the subscriber socket
@@ -129,7 +149,11 @@ public class NetMqListener
     // Pi's server ip address and port number
     private string serverIP;
 
-    // Listener object constuctor
+    /**
+    * Intialize our listener
+    * @param messageDelegate Delegate function to be called when we receive a new message
+    * @param serverIPin IP Address of the server we are going to attempt to find frames on
+    */ 
     public NetMqListener(MessageDelegate messageDelegate, string serverIPin)
     {
         // Assign IP and port
@@ -140,7 +164,9 @@ public class NetMqListener
         _listenerWorker = new Thread(ListenerWork);
     }
 
-    // Start the listener thread
+    /**
+    * Start the listener
+    */
     public void Start()
     {
         _listenerCancelled = false;
@@ -148,7 +174,9 @@ public class NetMqListener
     }
 
 
-    // Thread function that handles the socket connection and reads in data
+    /**
+    * Thread function that handles the socket connection and reads in data
+    */
     private void ListenerWork()
     {
         AsyncIO.ForceDotNet.Force();
@@ -188,7 +216,9 @@ public class NetMqListener
         NetMQConfig.Cleanup();
     }
 
-    // This method is called on scripts update function
+    /**
+    * This method is called by scripts update function every frame
+    */
     public void Update()
     {
         // If message queue is empty we're caught up, otherwise
@@ -208,7 +238,9 @@ public class NetMqListener
         }
     }
 
-    // Stops the listener thread
+    /**
+    * Stops the listener
+    */
     public void Stop()
     {
         _listenerCancelled = true;

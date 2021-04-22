@@ -1,6 +1,6 @@
-# PrarieSTEM-AR-Capstone
+# PrairieSTEM-AR-Capstone
 
-PrarieSTEM Augmented Reality Robot Control
+PrairieSTEM Augmented Reality Robot Control
 
 
 Extension of Project below with ability to have AR objects overlaying the Pi Camera feed
@@ -36,13 +36,9 @@ Example
 
 
 
-5. `testScripts`: This folder contains some preliminary scripts for testing and proof of concept ideas 
-- Frame Mocker: Pretends to be a Raspberry Pi and sends 'Camera frames' using an image
-- Multi-scaling Template Matching: Finds the PrarieSTEM lightbulb within an image
-
 Instuctions for use:
 
 It is the first step is to ensure that the Raspberry Pi is set up correctly and has the camera enabled. After that the user should run the shell script on the pi to download the necessary libraries. Next, configure the running enviornment on the computer by installing unity hub and importing the project. You then must install the version of Unity it prompts. Then create an EC2 instance and open up TCP trafic. Then run the EC2 script. Finally run the script on the raspberry PI and then start the scene within Unity. You should now see video being streamed to the Unity Application!
 
 Docs are located at:
-https://thazlett16.github.io/Capstone-Group7-Docs/
+https://mjkalahar.github.io/PrarieSTEM-AR-Capstone/

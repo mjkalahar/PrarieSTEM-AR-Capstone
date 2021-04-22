@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['zmqcommunication_137',['ZMQCommunication',['../classserver_1_1_z_m_q_communication.html',1,'server.ZMQCommunication'],['../classserver__imagezmq_1_1_z_m_q_communication.html',1,'server_imagezmq.ZMQCommunication']]]
+  ['otherdefaults_168',['OtherDefaults',['../classother_functions_1_1_other_defaults.html',1,'otherFunctions']]],
+  ['otherfunctions_169',['OtherFunctions',['../classother_functions_1_1_other_functions.html',1,'otherFunctions']]]
 ];

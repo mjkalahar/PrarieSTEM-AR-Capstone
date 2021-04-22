@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['offset_62',['OFFSET',['../namespaceserver.html#acc9f8ac87479dee4a34486aa94b0e1f7',1,'server.OFFSET()'],['../namespaceserver__imagezmq.html#a4bdb621ed753a066ba63845fea5865e5',1,'server_imagezmq.OFFSET()']]],
-  ['option_5fparse_63',['option_parse',['../namespaceserver.html#a2cab3909f9651e7cd27067277c47c199',1,'server']]],
-  ['other_5fdebug_64',['OTHER_DEBUG',['../classcustomcamera_1_1_camera_defaults.html#ae60bee5b130a9a55b5bfbcf9e39a2eb3',1,'customcamera.CameraDefaults.OTHER_DEBUG()'],['../classother_functions_1_1_other_defaults.html#a3034af423f5f77fe110de30cd03f13c9',1,'otherFunctions.OtherDefaults.OTHER_DEBUG()'],['../namespaceserver.html#abec3b4583aa2bf7a35bd8bebceddf0b5',1,'server.OTHER_DEBUG()']]],
-  ['other_5fdictionary_65',['other_dictionary',['../classother_functions_1_1_other_functions.html#ad75fd5de51ce8408bb05232fb040d7b0',1,'otherFunctions::OtherFunctions']]],
-  ['otherdefaults_66',['OtherDefaults',['../classother_functions_1_1_other_defaults.html',1,'otherFunctions']]],
-  ['otherfunctions_67',['otherFunctions',['../namespaceother_functions.html',1,'']]],
-  ['otherfunctions_68',['OtherFunctions',['../classother_functions_1_1_other_functions.html',1,'otherFunctions']]],
-  ['otherfunctions_2epy_69',['otherFunctions.py',['../other_functions_8py.html',1,'']]]
+  ['incoming_5faddress_75',['incoming_address',['../namespaceec2server.html#aaca6a1804cb42ad6c6cbb0cc41a68885',1,'ec2server']]],
+  ['incoming_5fconnection_76',['incoming_connection',['../namespaceec2server.html#a85bdfea138599564ba51b72f7d2cd749',1,'ec2server']]],
+  ['initialize_5fconnection_5fport_77',['INITIALIZE_CONNECTION_PORT',['../namespaceec2server.html#ac40279bf0a6bf7804587c5d11a3aaf4d',1,'ec2server.INITIALIZE_CONNECTION_PORT()'],['../namespaceserver.html#a74b7cb11c5d99c9ceeaf4be7c0cecd83',1,'server.INITIALIZE_CONNECTION_PORT()']]],
+  ['initialize_5fdictionary_78',['initialize_dictionary',['../classcustomcamera_1_1_custom_camera.html#a71c6feb1af1dc74d8e402fc9f7b6d948',1,'customcamera.CustomCamera.initialize_dictionary()'],['../classother_functions_1_1_other_functions.html#ae30722a30b0cf596c8fa44c1a24176a3',1,'otherFunctions.OtherFunctions.initialize_dictionary()']]],
+  ['int_79',['int',['../namespaceserver.html#a803365d66cd8c1e68f7e41a1837a59f4',1,'server']]],
+  ['is_5fstopped_80',['is_stopped',['../classcustomcamera_1_1_custom_camera.html#a9d554ebe94b10c80ca9f3c118ba7d182',1,'customcamera::CustomCamera']]]
 ];
