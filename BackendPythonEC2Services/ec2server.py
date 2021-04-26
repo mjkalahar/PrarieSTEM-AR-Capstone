@@ -212,6 +212,7 @@ def add_back_port():
         print_lock.release()
     for port in USED_PORTS:
         AVAILABLE_PORTS.append(port)
+    USED_PORTS.clear()
     AVAILABLE_PORTS.sort()
 
 def thread_available_connections():
