@@ -209,6 +209,11 @@ def add_back_port():
     if command_args["debug"]:
         print_lock.acquire()
         print("Adding ports back if any exist.")
+        if len(USED_PORTS) > 0:
+            print("Attempting to add back ports: ")
+            print(*USED_PORTS, sep = ", ")
+        else:
+            print("No ports to add back")
         print_lock.release()
     for port in USED_PORTS:
         AVAILABLE_PORTS.append(port)
