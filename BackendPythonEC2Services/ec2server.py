@@ -30,6 +30,8 @@ option_parse = argparse.ArgumentParser(description="Set up of EC2 server")
 option_parse.add_argument("--debug", type=bool, default=False, help="Shows debugging information", choices=[True, False])
 option_parse.add_argument("--data", type=bool, default=True, help="blocks data temporarily for ec2", choices=[True, False])
 option_parse.add_argument("--protocol", type=str, default="ImageZMQ", help="change the protocol used to send images", choices=["ImageZMQ", "ZMQ"])
+option_parse.add_argument("--showFPS", type=bool, default=False, help="Shows FPS information", choices=[True, False])
+
 
 command_args = vars(option_parse.parse_args())
 
@@ -167,6 +169,11 @@ def find_new_port():
     Searches for next available port for when we are looking to create a new connection
     :return new_port: Returns the int value of the next available port
     """
+    if command_args["debug"]:
+        print_lock.acquire()
+        print("Start of looking for new port, ports available: ")
+        print(*AVAILABLE_PORTS, sep = ", ")
+        print_lock.release()
     new_port = STARTING_PORT
     while True:
         if new_port in AVAILABLE_PORTS:
@@ -187,6 +194,11 @@ def find_new_port():
     if command_args["debug"]:
         print_lock.acquire()
         print("Found new available port, port " + str(new_port) + " will be used.")
+        print_lock.release()
+    if command_args["debug"]:
+        print_lock.acquire()
+        print("End of looking for new port, ports available: ")
+        print(*AVAILABLE_PORTS, sep = ", ")
         print_lock.release()
     return int(new_port)
 
@@ -352,7 +364,7 @@ def thread_function(new_port, protocol):
                                 fpsList.append(fps)
 
                         # Output FPS information in DEBUG mode
-                        if command_args["debug"]:
+                        if command_args["showFPS"]:
                             if(len(fpsList) > 0):
                                 print_lock.acquire()
                                 averageFPS = sum(fpsList) / len(fpsList)
