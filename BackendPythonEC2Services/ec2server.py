@@ -34,9 +34,9 @@ option_parse.add_argument("--protocol", type=str, default="ImageZMQ", help="chan
 command_args = vars(option_parse.parse_args())
 
 class ZMQCommunication:
-"""
-Socket control class using ZMQ 
-"""
+    """
+    Socket control class using ZMQ 
+    """
     def __init__(self, port, protocol):
         """
         Intialize our sockets, includes communication socket, socket for connection from Pi, and socket for outputing frames
@@ -107,9 +107,9 @@ Socket control class using ZMQ
         self.__context.term()
 
 class CustomTimer(object):
-"""
-Custom timer object used for freeing up threads that are no longer active
-"""
+    """
+    Custom timer object used for freeing up threads that are no longer active
+    """
     def __init__(self, interval, callback_function, *args, **kwargs):
         """
         Initalize the timer
@@ -170,9 +170,24 @@ def find_new_port():
     new_port = STARTING_PORT
     while True:
         if new_port in AVAILABLE_PORTS:
+            if command_args["debug"]:
+                print_lock.acquire()
+                print("Port " + str(new_port) + " is available, removing from available list and returning.")
+                print_lock.release()
             AVAILABLE_PORTS.remove(new_port)
             break
+        else:
+            if command_args["debug"]:
+                print_lock.acquire()
+                print("Port " + str(new_port) + " is not availabe.")
+                print_lock.release()
+        
         new_port += 1
+
+    if command_args["debug"]:
+        print_lock.acquire()
+        print("Found new available port, port " + str(new_port) + " will be used.")
+        print_lock.release()
     return int(new_port)
 
 def add_back_port():

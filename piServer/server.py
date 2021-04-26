@@ -33,16 +33,15 @@ option_parse.add_argument("--brightness", type=int, default=customcamera.CameraD
 option_parse.add_argument("--contrast", type=int, default=customcamera.CameraDefaults.CAMERA_CONTRAST_DEFAULT, help="Set the contrast value", choices=customcamera.get_valid_contrast())
 option_parse.add_argument("--saturation", type=int, default=customcamera.CameraDefaults.CAMERA_SATURATION_DEFAULT, help="Set the saturation value", choices=customcamera.get_valid_saturation())
 option_parse.add_argument("--stabilization", type=int, default=customcamera.CameraDefaults.CAMERA_STABILIZATION_DEFAULT, help="Set the stabilization value", choices=customcamera.get_valid_stabilization())
-option_parse.add_argument("--debug", type=bool, default=customcamera.CameraDefaults.OTHER_DEBUG, help="Shows debugging information", choices=customcamera.get_valid_debug())
 
 command_args = vars(option_parse.parse_args())
 
 DEBUG = command_args["debug"]
 
 class ZMQCommunication:
-"""
-Socket control class using ZMQ 
-"""
+    """
+    Socket control class using ZMQ 
+    """
     def __init__(self, port, host=ec2_host):
         """
         Intialize our sockets, includes communication socket, socket for connection from Pi to server
