@@ -48,7 +48,7 @@ The following links contain the PNG files of the patterns that were used for our
 [Letter F Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/letterF.png)\
 [PrairieSTEM Light Bulb Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/lightbulbpattern.png)\
 [Hiro Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/hiro.png)\
-[Kanji Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/kanji.png)\
+[Kanji Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/kanji.png)
 
 Generated code documentation is located at: 
 https://mjkalahar.github.io/PrarieSTEM-AR-Capstone/
