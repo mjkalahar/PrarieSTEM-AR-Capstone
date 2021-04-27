@@ -40,5 +40,16 @@ Instuctions for use:
 
 It is the first step is to ensure that the Raspberry Pi is set up correctly and has the camera enabled. After that the user should run the shell script on the pi to download the necessary libraries. Next, configure the running enviornment on the computer by installing unity hub and importing the project. You then must install the version of Unity it prompts. Then create an EC2 instance and open up TCP trafic. Then run the EC2 script. Finally run the script on the raspberry PI and then start the scene within Unity. You should now see video being streamed to the Unity Application!
 
-Docs are located at:
+The following links contain the PNG files of the patterns that were used for our project.
+[Letter A Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/letterA.png)
+[Letter B Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/letterB.png)
+[Letter C Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/letterC.png)
+[Letter D Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/letterD.png)
+[Letter F Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/letterF.png)
+[PrairieSTEM Light Bulb Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/lightbulbpattern.png)
+[Hiro Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/hiro.png)
+[Kanji Pattern](https://github.com/mjkalahar/PrarieSTEM-AR-Capstone/blob/main/unityIntegration/Assets/Plugins/x86_64/kanji.png)
+
+Generated code documentation is located at: 
 https://mjkalahar.github.io/PrarieSTEM-AR-Capstone/
+NOTE: Unity files are not shown under Packages view. To find them, please refer to Class List or File List views.
