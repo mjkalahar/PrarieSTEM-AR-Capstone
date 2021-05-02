@@ -5,9 +5,9 @@ from time import sleep
 
 
 class CameraDefaults:
-"""
-Default values for camera initialization
-"""
+    """
+    Default values for camera initialization
+    """
     CAMERA_RESOLUTION_DEFAULT = "480p"
     CAMERA_FRAMERATE_DEFAULT = 60
     CAMERA_HFLIP_DEFAULT = False

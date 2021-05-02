@@ -3,12 +3,10 @@ import customcamera
 import time
 
 
-
-
 class TestValidOptions(unittest.TestCase):
-"""
-Tests the available valid options for each field
-"""
+    """
+    Tests the available valid options for each field
+    """
     def test_get_valid_options(self):
         self.assertEqual(customcamera.get_valid_debug(), [True, False])
         self.assertEqual(customcamera.get_valid_resolutions(), ["720p", "480p", "360p", "240p"])
@@ -23,9 +21,9 @@ Tests the available valid options for each field
         self.assertEqual(customcamera.get_valid_stabilization(), [True, False])
 
 class TestDefaults(unittest.TestCase):
-"""
-Tests the default option for each field
-"""
+    """
+    Tests the default option for each field
+    """
     def test_defaults(self):
         self.assertEqual(customcamera.CameraDefaults.CAMERA_RESOLUTION_DEFAULT, "480p")
         self.assertEqual(customcamera.CameraDefaults.CAMERA_FRAMERATE_DEFAULT, 60)
@@ -40,9 +38,9 @@ Tests the default option for each field
         self.assertEqual(customcamera.CameraDefaults.OTHER_DEBUG, False)
 
 class TestCameraDefaultInitialization(unittest.TestCase):
-"""
-Tests that each field is populated correctly at start
-"""
+    """
+    Tests that each field is populated correctly at start
+    """
     def test_initialization(self):
         with customcamera.CustomCamera({}) as testCam:
             self.assertEqual(testCam.get_debug(), customcamera.CameraDefaults.OTHER_DEBUG)
@@ -59,9 +57,9 @@ Tests that each field is populated correctly at start
 
 
 class TestCameraInitializationDebug(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for debug
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for debug
+    """
     def test_initialization_default(self):
         passed_dict = dict([("debug", customcamera.CameraDefaults.OTHER_DEBUG)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -80,9 +78,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationResolution(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for Resolution
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for Resolution
+    """
     def test_initialization_default(self):
         passed_dict = dict([("resolution", customcamera.CameraDefaults.CAMERA_RESOLUTION_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -101,9 +99,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationFramerate(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for Framerate
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for Framerate
+    """
     def test_initialization_default(self):
         passed_dict = dict([("framerate", customcamera.CameraDefaults.CAMERA_FRAMERATE_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -122,9 +120,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationHflip(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for H-FLIP
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for H-FLIP
+    """
     def test_initialization_default(self):
         passed_dict = dict([("hflip", customcamera.CameraDefaults.CAMERA_HFLIP_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -143,9 +141,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationVflip(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for V-FLIP
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for V-FLIP
+    """
     def test_initialization_default(self):
         passed_dict = dict([("vflip", customcamera.CameraDefaults.CAMERA_VFLIP_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -164,9 +162,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationRotation(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for Rotation
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for Rotation
+    """
     def test_initialization_default(self):
         passed_dict = dict([("rotation", customcamera.CameraDefaults.CAMERA_ROTATION_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -185,9 +183,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationIso(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for ISO
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for ISO
+    """
     def test_initialization_default(self):
         passed_dict = dict([("iso", customcamera.CameraDefaults.CAMERA_ISO_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -206,9 +204,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationBrightness(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for Brightness
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for Brightness
+    """
     def test_initialization_default(self):
         passed_dict = dict([("brightness", customcamera.CameraDefaults.CAMERA_BRIGHTNESS_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -227,9 +225,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationContrast(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for Contrast
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for Contrast
+    """
     def test_initialization_default(self):
         passed_dict = dict([("contrast", customcamera.CameraDefaults.CAMERA_CONTRAST_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -248,9 +246,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationSaturation(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for Saturation
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for Saturation
+    """
     def test_initialization_default(self):
         passed_dict = dict([("saturation", customcamera.CameraDefaults.CAMERA_SATURATION_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
@@ -269,9 +267,9 @@ Tests that each option passed meets the criteria for default, valid and invalid 
 
 
 class TestCameraInitializationStabilization(unittest.TestCase):
-"""
-Tests that each option passed meets the criteria for default, valid and invalid parameters for Stabilization
-"""
+    """
+    Tests that each option passed meets the criteria for default, valid and invalid parameters for Stabilization
+    """
     def test_initialization_default(self):
         passed_dict = dict([("stabilization", customcamera.CameraDefaults.CAMERA_STABILIZATION_DEFAULT)])
         with customcamera.CustomCamera(passed_dict) as testCam:
